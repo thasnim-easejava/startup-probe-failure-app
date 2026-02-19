@@ -22,26 +22,22 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class SystemConfig {
 
-  private volatile boolean initialized = true;
+  private volatile boolean initialized = false;
 
     @PostConstruct
     void init() {
-        // COMMENTED OUT: 60-second sleep that causes startup timeout
-        // This code simulates slow startup (e.g. DB warmup) but causes deployment failures
-        /*
+        // Simulate slow startup that exceeds startup probe timeout
+        // This causes the container to be killed and restarted by Kubernetes
         new Thread(() -> {
             try {
-                // Simulate slow startup (e.g. DB warmup)
-                Thread.sleep(60_000); // 60 seconds
+                // Simulate slow startup (e.g. DB warmup, cache initialization)
+                // 600 seconds (10 minutes) - exceeds default startup timeout of ~500s
+                Thread.sleep(600_000);
                 initialized = true;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }).start();
-        */
-        
-        // Initialization complete immediately to prevent startup timeout
-        initialized = true;
     }
 
     public boolean isInitialized() {
