@@ -11,22 +11,34 @@
 package io.openliberty.sample.system;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Startup;
 
 /**
- * Simple startup health check.
- * Returns UP status once the application has completed its startup delay.
+ * Startup health check that waits for application initialization.
+ * Returns DOWN until the 7-minute initialization completes.
  */
 @Startup
 @ApplicationScoped
 public class DatabaseStartupCheck implements HealthCheck {
 	
+	@Inject
+	SystemConfig systemConfig;
+	
 	@Override
 	public HealthCheckResponse call() {
-		// Simple health check - always returns UP after startup completes
+		// Check if initialization is complete
+		if (!systemConfig.isInitialized()) {
+			return HealthCheckResponse.named("DatabaseStartupCheck")
+					.withData("status", "DOWN")
+					.withData("reason", "Application initialization in progress")
+					.down()
+					.build();
+		}
+		
 		return HealthCheckResponse.named("DatabaseStartupCheck")
 				.withData("status", "UP")
 				.up()
