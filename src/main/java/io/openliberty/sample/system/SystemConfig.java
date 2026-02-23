@@ -24,21 +24,22 @@ public class SystemConfig {
 
   private volatile boolean initialized = false;
 
-    @PostConstruct
-    void init() {
-        // Simulate slow startup that exceeds startup probe timeout
-        // This causes the container to be killed and restarted by Kubernetes
-        new Thread(() -> {
-            try {
-                // Simulate slow startup (e.g. DB warmup, cache initialization)
-                // 600 seconds (10 minutes) - exceeds default startup timeout of ~500s
-                Thread.sleep(600_000);
-                initialized = true;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-    }
+    // Commented out to fix startup probe failure
+    // @PostConstruct
+    // void init() {
+    //     // Simulate slow startup that exceeds startup probe timeout
+    //     // This causes the container to be killed and restarted by Kubernetes
+    //     new Thread(() -> {
+    //         try {
+    //             // Simulate slow startup (e.g. DB warmup, cache initialization)
+    //             // 600 seconds (10 minutes) - exceeds default startup timeout of ~500s
+    //             Thread.sleep(600_000);
+    //             initialized = true;
+    //         } catch (InterruptedException e) {
+    //             Thread.currentThread().interrupt();
+    //         }
+    //     }).start();
+    // }
 
     public boolean isInitialized() {
         return initialized;
