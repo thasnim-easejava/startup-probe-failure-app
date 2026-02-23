@@ -26,14 +26,14 @@ public class DatabaseReadinessCheck implements HealthCheck {
 	
 	/**
 	 * Simulates checking database connectivity.
-	 * Returns true to indicate database is reachable.
+	 * Returns false to simulate database unreachable scenario.
 	 *
-	 * @return true to indicate database is reachable
+	 * @return false to indicate database is unreachable
 	 */
 	private boolean isDatabaseReachable() {
-		// Fixed: Return true to allow the application to become ready
-		// Previously returned false, causing startup probe failures
-		return true;
+		// Simulate database unreachable scenario
+		// This causes the application to never report as ready, leading to startup timeout
+		return false;
 	}
 	
 	@Override

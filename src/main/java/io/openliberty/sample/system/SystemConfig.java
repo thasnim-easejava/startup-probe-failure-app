@@ -22,26 +22,23 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class SystemConfig {
 
-  // Set to true to allow startup probe to succeed immediately
-  private volatile boolean initialized = true;
+  private volatile boolean initialized = false;
 
-    // Commented out to fix startup probe failure
-    // The slow initialization code below was causing startup probe timeouts
-    // @PostConstruct
-    // void init() {
-    //     // Simulate slow startup that exceeds startup probe timeout
-    //     // This causes the container to be killed and restarted by Kubernetes
-    //     new Thread(() -> {
-    //         try {
-    //             // Simulate slow startup (e.g. DB warmup, cache initialization)
-    //             // 600 seconds (10 minutes) - exceeds default startup timeout of ~500s
-    //             Thread.sleep(600_000);
-    //             initialized = true;
-    //         } catch (InterruptedException e) {
-    //             Thread.currentThread().interrupt();
-    //         }
-    //     }).start();
-    // }
+    @PostConstruct
+    void init() {
+        // Simulate slow startup that exceeds startup probe timeout
+        // This causes the container to be killed and restarted by Kubernetes
+        new Thread(() -> {
+            try {
+                // Simulate slow startup (e.g. DB warmup, cache initialization)
+                // 500 seconds delay - exceeds typical startup probe timeout
+                Thread.sleep(500_000);
+                initialized = true;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
 
     public boolean isInitialized() {
         return initialized;
