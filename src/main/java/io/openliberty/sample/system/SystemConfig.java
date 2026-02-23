@@ -26,13 +26,13 @@ public class SystemConfig {
 
     @PostConstruct
     void init() {
-        // Simulate slow startup that exceeds startup probe timeout
-        // This causes the container to be killed and restarted by Kubernetes
+        // Simulate slow startup that completes before startup probe timeout
+        // This allows the container to successfully start
         new Thread(() -> {
             try {
                 // Simulate slow startup (e.g. DB warmup, cache initialization)
-                // 497 seconds delay - just under the Kubernetes startup probe timeout of 498s
-                Thread.sleep(497_000);
+                // 480 seconds delay - provides 18-second buffer before Kubernetes timeout of 498s
+                Thread.sleep(480_000);
                 initialized = true;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
