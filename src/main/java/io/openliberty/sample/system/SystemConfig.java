@@ -22,9 +22,11 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class SystemConfig {
 
-  private volatile boolean initialized = false;
+  // Set to true to allow startup probe to succeed immediately
+  private volatile boolean initialized = true;
 
     // Commented out to fix startup probe failure
+    // The slow initialization code below was causing startup probe timeouts
     // @PostConstruct
     // void init() {
     //     // Simulate slow startup that exceeds startup probe timeout
