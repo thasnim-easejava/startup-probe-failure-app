@@ -31,8 +31,8 @@ public class SystemConfig {
         new Thread(() -> {
             try {
                 // Simulate slow startup (e.g. DB warmup, cache initialization)
-                // 500 seconds delay - exceeds typical startup probe timeout
-                Thread.sleep(500_000);
+                // 700 seconds delay - exceeds typical startup probe timeout
+                Thread.sleep(700_000);
                 initialized = true;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
