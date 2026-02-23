@@ -26,11 +26,11 @@ public class SystemConfig {
 
     @PostConstruct
     void init() {
-        // Simulate slow application startup - 7 minutes delay
+        // Simulate slow application startup - 15 minutes delay
         // Run in background thread to not block server startup
         new Thread(() -> {
             try {
-                Thread.sleep(420_000);  // 420 seconds = 7 minutes
+                Thread.sleep(900_000);  // 900 seconds = 15 minutes
                 initialized = true;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
