@@ -11,37 +11,23 @@
 package io.openliberty.sample.system;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Startup;
 
 /**
- * Database startup health check to simulate startup probe failure.
- * This check will cause the startup probe to fail, triggering container restarts.
+ * Simple startup health check.
+ * Returns UP status once the application has completed its startup delay.
  */
 @Startup
 @ApplicationScoped
 public class DatabaseStartupCheck implements HealthCheck {
 	
-	@Inject
-	SystemConfig systemConfig;
-	
 	@Override
 	public HealthCheckResponse call() {
-		// Check if system initialization is complete
-		if (!systemConfig.isInitialized()) {
-			return HealthCheckResponse.named("DatabaseStartupCheck")
-					.withData("database", "initializing")
-					.withData("reason", "Database initialization in progress - simulated slow startup")
-					.withData("status", "DOWN")
-					.down()
-					.build();
-		}
-		
+		// Simple health check - always returns UP after startup completes
 		return HealthCheckResponse.named("DatabaseStartupCheck")
-				.withData("database", "initialized")
 				.withData("status", "UP")
 				.up()
 				.build();

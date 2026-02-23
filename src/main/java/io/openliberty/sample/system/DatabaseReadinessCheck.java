@@ -17,38 +17,17 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
 /**
- * Database readiness health check to simulate database unreachable scenario.
- * This check will cause the application instance to report as "not ready".
+ * Simple readiness health check.
+ * Returns UP status to indicate the application is ready to accept traffic.
  */
 @Readiness
 @ApplicationScoped
 public class DatabaseReadinessCheck implements HealthCheck {
 	
-	/**
-	 * Simulates checking database connectivity.
-	 * Returns false to simulate database unreachable scenario.
-	 *
-	 * @return false to indicate database is unreachable
-	 */
-	private boolean isDatabaseReachable() {
-		// Simulate database unreachable scenario
-		// This causes the application to never report as ready, leading to startup timeout
-		return false;
-	}
-	
 	@Override
 	public HealthCheckResponse call() {
-		if (!isDatabaseReachable()) {
-			return HealthCheckResponse.named("DatabaseReadinessCheck")
-					.withData("database", "unreachable")
-					.withData("reason", "Database connection failed - simulated failure")
-					.withData("status", "DOWN")
-					.down()
-					.build();
-		}
-		
+		// Simple health check - always returns UP
 		return HealthCheckResponse.named("DatabaseReadinessCheck")
-				.withData("database", "reachable")
 				.withData("status", "UP")
 				.up()
 				.build();

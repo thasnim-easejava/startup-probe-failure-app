@@ -22,26 +22,14 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class SystemConfig {
 
-  private volatile boolean initialized = false;
-
     @PostConstruct
     void init() {
-        // Simulate slow startup that takes 7 minutes
-        // This will cause startup probe to fail (exceeds 498s timeout)
-        new Thread(() -> {
-            try {
-                // 7 minutes = 420 seconds delay
-                // Simulates slow startup (e.g. DB warmup, cache initialization)
-                Thread.sleep(420_000);
-                initialized = true;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-    }
-
-    public boolean isInitialized() {
-        return initialized;
+        // Simulate slow application startup - 7 minutes delay
+        try {
+            Thread.sleep(420_000);  // 420 seconds = 7 minutes
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
   @Inject
